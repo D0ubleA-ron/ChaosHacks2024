@@ -4,5 +4,4 @@ function DisplayContent(direction) {
     const audio = new Audio('./audio.wav');
     audio.play()
     
-
 }
