@@ -28,7 +28,7 @@ export default function App() {
   const [start, setStart] = useState(false);
   const handleClick = () => {
     const parsedLocation = location.split(" ").join("+");
-    alert("YOU SUCK!, " + parsedLocation + " is a terrible place to drive!");
+    alert(parsedLocation);
     setStart(true);
   };
   const handleQuit = () => {
@@ -78,7 +78,7 @@ export default function App() {
               height="100%"
             >
               <Typography color={"white"} variant="h3">
-                next steps
+                Next Steps
               </Typography>
             </Box>
           </Grid>
