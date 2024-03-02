@@ -20,17 +20,19 @@ const StyledTextField = styled(TextField)`
     color: white;
   }
   width: 70%;
+  max-width: 500px;
 `;
 
 export default function App() {
-  const [directionData, setDirectionData] = useState({});
   const [jsonData, setJsonData] = useState(null);
   const [location, setLocation] = useState("");
   const [start, setStart] = useState(false);
   const handleClick = () => {
-    fetchData();
     const parsedLocation = location.split(" ").join("+");
-    alert(parsedLocation);
+    // 6efdec7c0736a882e98400a1275087e1626d551f335907b5b903ca83e557bfc6
+    console.log(
+      `https://serpapi.com/search.json?engine=google_maps_directions&start_coords=49.182161,-122.868295&end_addr=${parsedLocation}&hl=en&api_key=NULL`
+    );
     setStart(true);
   };
   const handleQuit = () => {
