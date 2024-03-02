@@ -24,14 +24,14 @@ const StyledTextField = styled(TextField)`
 
 export default function App() {
   const [directionData, setDirectionData] = useState({});
-  const [page, setPage] = useState(0);
+  const [start, setStart] = useState(false);
   const handleClick = () => {
     alert("YOU SUCK!");
-    setPage(page + 1);
+    setStart(true);
   };
   return (
     <Grid container style={{ height: "100vh" }}>
-      {page < 1 ? (
+      {start < 1 ? (
         <>
           <Grid item xs={12} height={"10%"} textAlign={"center"}>
             <Typography color={"white"} variant="h3" marginTop={5}>
