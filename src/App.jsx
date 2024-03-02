@@ -1,32 +1,15 @@
-import "./App.css";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import styled from "styled-components";
-import { useState } from "react";
+import React, { useState } from 'react';
+import './App.css';
 
-const StyledTextField = styled(TextField)`
-  .MuiInput-underline:before {
-    border-bottom: 1px solid white;
-  }
-  .MuiInput-underline:hover:before {
-    border-bottom: 2px solid white;
-  }
-  .MuiInput-underline:after {
-    border-bottom: 2px solid white;
-  }
-  .MuiInputBase-input {
-    color: white;
-  }
-  .MuiFormLabel-root {
-    color: white;
-  }
-  width: 70%;
-`;
+const App = () => {
+    const [jsonData, setJsonData] = useState(null);
 
 export default function App() {
   const [directionData, setDirectionData] = useState({});
   const [location, setLocation] = useState("");
   const [start, setStart] = useState(false);
   const handleClick = () => {
+    fetchData();
     const parsedLocation = location.split(" ").join("+");
     alert(parsedLocation);
     setStart(true);
@@ -34,6 +17,16 @@ export default function App() {
   const handleQuit = () => {
     alert("Loser");
   };
+  async function fetchData() {
+    try {
+        const response = await fetch("http://localhost:3001/search"); // Point to your local server
+        const data = await response.json();
+        console.log(data);
+        setJsonData(data);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
   return (
     <Grid container style={{ height: "100vh" }}>
       {start < 1 ? (
@@ -96,4 +89,6 @@ export default function App() {
       )}
     </Grid>
   );
+  
 }
+export default App;
