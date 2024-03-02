@@ -24,10 +24,15 @@ const StyledTextField = styled(TextField)`
 
 export default function App() {
   const [directionData, setDirectionData] = useState({});
+  const [location, setLocation] = useState("");
   const [start, setStart] = useState(false);
   const handleClick = () => {
-    alert("YOU SUCK!");
+    const parsedLocation = location.split(" ").join("+");
+    alert("YOU SUCK!, " + parsedLocation + " is a terrible place to drive!");
     setStart(true);
+  };
+  const handleQuit = () => {
+    alert("Loser");
   };
   return (
     <Grid container style={{ height: "100vh" }}>
@@ -46,37 +51,49 @@ export default function App() {
               height="100%"
             >
               <StyledTextField
+                onChange={(e) => setLocation(e.target.value)}
                 label="Where do you want to drive?"
                 variant="standard"
               />
             </Box>
           </Grid>
+          <Grid item xs={12} height={"10%"} textAlign={"center"}>
+            <Button
+              size="large"
+              variant="contained"
+              color="secondary"
+              onClick={handleClick}
+            >
+              Lets-a-go
+            </Button>
+          </Grid>
         </>
       ) : (
-        <Grid item xs={12} height={"90%"}>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="100%"
-          >
-            <Typography color={"white"} variant="h3">
-              next steps
-            </Typography>
-          </Box>
-        </Grid>
+        <>
+          <Grid item xs={12} height={"90%"}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="100%"
+            >
+              <Typography color={"white"} variant="h3">
+                next steps
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} height={"10%"} textAlign={"center"}>
+            <Button
+              size="large"
+              variant="contained"
+              color="secondary"
+              onClick={handleQuit}
+            >
+              Give Up
+            </Button>
+          </Grid>
+        </>
       )}
-
-      <Grid item xs={12} height={"10%"} textAlign={"center"}>
-        <Button
-          size="large"
-          variant="contained"
-          color="secondary"
-          onClick={handleClick}
-        >
-          Lets-a-go
-        </Button>
-      </Grid>
     </Grid>
   );
 }
