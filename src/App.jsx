@@ -18,6 +18,7 @@ const StyledTextField = styled(TextField)`
   .MuiFormLabel-root {
     color: white;
   }
+  width: 70%;
 `;
 
 export default function App() {
