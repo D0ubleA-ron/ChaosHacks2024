@@ -27,27 +27,25 @@ export default function App() {
   const [jsonData, setJsonData] = useState(null);
   const [location, setLocation] = useState("");
   const [start, setStart] = useState(false);
-  const handleClick = () => {
+  const handleClick = async () => {
     const parsedLocation = location.split(" ").join("+");
-    // 6efdec7c0736a882e98400a1275087e1626d551f335907b5b903ca83e557bfc6
-    console.log(
-      `https://serpapi.com/search.json?engine=google_maps_directions&start_coords=49.182161,-122.868295&end_addr=${parsedLocation}&hl=en&api_key=NULL`
-    );
-    setStart(true);
-  };
-  const handleQuit = () => {
-    alert("Loser");
-  };
-  async function fetchData() {
     try {
-      const response = await fetch("http://localhost:3001/search"); // Point to your local server
+      const response = await fetch(
+        `http://localhost:3001/search?endAddress=${parsedLocation}`
+      ); // Point to your local server
       const data = await response.json();
       console.log(data);
       setJsonData(data);
+      setStart(true);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }
+  };
+
+  const handleQuit = () => {
+    alert("Loser");
+  };
+
   return (
     <Grid container style={{ height: "100vh" }}>
       {start < 1 ? (
