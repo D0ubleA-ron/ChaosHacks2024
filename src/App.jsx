@@ -34,7 +34,11 @@ export default function App() {
         `http://localhost:3001/search?endAddress=${parsedLocation}`
       ); // Point to your local server
       const data = await response.json();
-      console.log(data);
+      data.directions[0].trips.forEach((obj) => {
+        obj.details.forEach((detail) => {
+          console.log(detail.title, detail.gps_coordinates);
+        });
+      });
       setJsonData(data);
       setStart(true);
     } catch (error) {
