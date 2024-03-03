@@ -1,5 +1,5 @@
 import "./App.css";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Grid, TextField, Typography, Button } from "@mui/material";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 
@@ -24,6 +24,12 @@ const StyledTextField = styled(TextField)`
   }
   width: 70%;
   max-width: 500px;
+`;
+
+const GradientButton = styled(Button)`
+  background: linear-gradient(45deg, #ff00b8, #ff0000);
+  border-radius: 20px;
+  color: white;
 `;
 
 export default function App() {
@@ -116,15 +122,14 @@ export default function App() {
             </Box>
           </Grid>
           <Grid item xs={12} height={"10%"} textAlign={"center"}>
-            <Button
+            <GradientButton
               size="large"
               variant="contained"
-              color="secondary"
               onClick={handleClick}
               disabled={saving}
             >
               Lets-a-go
-            </Button>
+            </GradientButton>
           </Grid>
         </>
       ) : (
@@ -137,7 +142,7 @@ export default function App() {
               height="100%"
             >
               <Typography color={"white"} variant="h3" textAlign={"center"}>
-                {step.direction}
+                {step.long}
               </Typography>
             </Box>
           </Grid>
