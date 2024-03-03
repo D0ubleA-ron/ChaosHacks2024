@@ -46,7 +46,7 @@ export default function App() {
     setSaving(true);
     try {
       const response = await fetch(
-          `http://localhost:3001/search?endAddress=${parsedLocation}&latitude=${latitude}&longitude=${longitude}`
+        `http://localhost:3001/search?endAddress=${parsedLocation}&latitude=${latitude}&longitude=${longitude}`
       ); // Point to your local server
       const data = await response.json();
       let steps = [];
@@ -81,6 +81,7 @@ export default function App() {
   }, [jsonData]);
 
   useEffect(() => {
+    let coords = {};
     if (start) {
       setStep(jsonData[0]);
       let i = 1;
@@ -88,10 +89,22 @@ export default function App() {
         if (i === jsonData.length) {
           clearInterval(interval);
         }
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              coords = position.coords;
+            },
+            (error) => {
+              console.error("Error getting location:", error);
+            }
+          );
+        } else {
+          console.log("Geolocation is not supported by this browser");
+        }
         if (
           verifyCoordinates(
-            latitude,
-            longitude,
+            coords.latitude,
+            coords.longitude,
             jsonData[i].lat,
             jsonData[i].long
           )
@@ -100,7 +113,12 @@ export default function App() {
           setStep(jsonData[i]);
           i++;
         } else {
-          console.log(latitude, longitude, jsonData[i].lat, jsonData[i].long);
+          console.log(
+            coords.latitude,
+            coords.longitude,
+            jsonData[i].lat,
+            jsonData[i].long
+          );
         }
       }, 1000);
       return () => clearInterval(interval);
@@ -108,30 +126,7 @@ export default function App() {
   }, [start, jsonData]);
 
   // useEffect(() => {
-  //   if (
-  //     start &&
-  //     jsonData &&
-  //     verifyCoordinates(
-  //       latitude,
-  //       longitude,
-  //       jsonData[counter].lat,
-  //       jsonData[counter].long
-  //     )
-  //   ) {
-  //     console.log("You did it!");
-  //     setStep(jsonData[counter]);
-  //     setCounter(counter + 1);
-  //   } else {
-  //     console.log(
-  //       "verify: ",
-  //       verifyCoordinates(
-  //         latitude,
-  //         longitude,
-  //         jsonData[counter].lat,
-  //         jsonData[counter].long
-  //       )
-  //     );
-  //   }
+  //   console.log("Latitude:", latitude, "Longitude:", longitude);
   // }, [userLocation]);
 
   return (
