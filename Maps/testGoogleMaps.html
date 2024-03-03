@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Directions</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPTL1ThBXNcU9SUEQmUJ7IMrKjd7X4E9E"></script>
+</head>
+<body>
+    <div id="directionsPanel"></div>
+    <script>
+        let directionsService = new google.maps.DirectionsService();
+
+        let request = {
+            origin: "Sydney, NSW",
+            destination: "Melbourne, VIC",
+            travelMode: google.maps.TravelMode.DRIVING,
+        };
+
+        directionsService.route(request, (response, status) => {
+            if (status === "OK") {
+                let route = response.routes[0];
+                let directions = [];
+
+                for (let i = 0; i < route.legs.length; i++) {
+                    let leg = route.legs[i];
+                    for (let j = 0; j < leg.steps.length; j++) {
+                        let step = leg.steps[j];
+                        directions.push(step.instructions);
+                    }
+                }
+
+                // Display the text directions in the directionsPanel
+                let directionsPanel = document.getElementById("directionsPanel");
+                directionsPanel.innerHTML = directions.join("<br>");
+            } else {
+                console.error("Directions request failed due to " + status);
+            }
+        });
+    </script>
+</body>
+</html>
