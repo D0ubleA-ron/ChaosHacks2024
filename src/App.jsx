@@ -38,12 +38,8 @@ export default function App() {
   const [start, setStart] = useState(false);
   const [step, setStep] = useState("");
   const [saving, setSaving] = useState(false);
-  const testLat = 49.189116;
-  const testLong = -122.85047;
   const userLocation = useUserLocation();
   const { latitude, longitude } = userLocation || {};
-
-  console.log(verifyCoordinates(latitude, longitude, testLat, testLong));
 
   const handleClick = async () => {
     const parsedLocation = location.split(" ").join("+");
@@ -66,6 +62,7 @@ export default function App() {
       steps.push({ direction: "Woo Hoo, You did it!", long: 0, lat: 0 });
       setJsonData(steps);
       setStart(true);
+      setStep(steps[0]);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -88,15 +85,54 @@ export default function App() {
       setStep(jsonData[0]);
       let i = 1;
       const interval = setInterval(() => {
-        setStep(jsonData[i]);
-        i++;
         if (i === jsonData.length) {
           clearInterval(interval);
         }
-      }, 3000);
+        if (
+          verifyCoordinates(
+            latitude,
+            longitude,
+            jsonData[i].lat,
+            jsonData[i].long
+          )
+        ) {
+          console.log("You did it!");
+          setStep(jsonData[i]);
+          i++;
+        } else {
+          console.log(latitude, longitude, jsonData[i].lat, jsonData[i].long);
+        }
+      }, 1000);
       return () => clearInterval(interval);
     }
   }, [start, jsonData]);
+
+  // useEffect(() => {
+  //   if (
+  //     start &&
+  //     jsonData &&
+  //     verifyCoordinates(
+  //       latitude,
+  //       longitude,
+  //       jsonData[counter].lat,
+  //       jsonData[counter].long
+  //     )
+  //   ) {
+  //     console.log("You did it!");
+  //     setStep(jsonData[counter]);
+  //     setCounter(counter + 1);
+  //   } else {
+  //     console.log(
+  //       "verify: ",
+  //       verifyCoordinates(
+  //         latitude,
+  //         longitude,
+  //         jsonData[counter].lat,
+  //         jsonData[counter].long
+  //       )
+  //     );
+  //   }
+  // }, [userLocation]);
 
   return (
     <Grid container style={{ height: "100vh" }}>
@@ -142,7 +178,7 @@ export default function App() {
               height="100%"
             >
               <Typography color={"white"} variant="h3" textAlign={"center"}>
-                {step.long}
+                {step.direction}
               </Typography>
             </Box>
           </Grid>
