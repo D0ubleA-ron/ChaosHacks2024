@@ -46,7 +46,7 @@ export default function App() {
     setSaving(true);
     try {
       const response = await fetch(
-        `http://localhost:3001/search?endAddress=${parsedLocation}`
+          `http://localhost:3001/search?endAddress=${parsedLocation}&latitude=${latitude}&longitude=${longitude}`
       ); // Point to your local server
       const data = await response.json();
       let steps = [];
