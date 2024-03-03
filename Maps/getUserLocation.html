@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Coordinates Test</title>
+</head>
+<body>
+    <h1>Live Coordinates Test</h1>
+    <p>Latitude: <span id="latitude"></span></p>
+    <p>Longitude: <span id="longitude"></span></p>
+
+    <script>
+        // Check if Geolocation is supported by the browser
+        if ("geolocation" in navigator) {
+            // Continuously monitor the user's position and update coordinates every second
+            const watchId = navigator.geolocation.watchPosition(
+                position => {
+                    // Success callback
+                    const { latitude, longitude } = position.coords;
+                    document.getElementById("latitude").innerText = latitude.toFixed(6);
+                    document.getElementById("longitude").innerText = longitude.toFixed(6);
+                },
+                error => {
+                    // Error callback
+                    console.error("Error getting location:", error.message);
+                },
+                { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+            );
+
+            // Stop watching the user's position after a certain time (e.g., 10 seconds)
+            setTimeout(() => {
+                navigator.geolocation.clearWatch(watchId);
+                console.log("Stopped watching location");
+            }, 10000);
+        } else {
+            console.log("Geolocation is not supported by this browser");
+        }
+    </script>
+</body>

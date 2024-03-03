@@ -3,6 +3,9 @@ import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 
+import { verifyCoordinates } from "../Maps/verifyCoordinates";
+import useUserLocation from "../Maps/locationHelper.js";
+
 const StyledTextField = styled(TextField)`
   .MuiInput-underline:before {
     border-bottom: 1px solid white;
@@ -29,6 +32,13 @@ export default function App() {
   const [start, setStart] = useState(false);
   const [step, setStep] = useState("");
   const [saving, setSaving] = useState(false);
+  const testLat = 49.189116;
+  const testLong = -122.85047;
+  const userLocation = useUserLocation();
+  const { latitude, longitude } = userLocation || {};
+
+  console.log(verifyCoordinates(latitude, longitude, testLat, testLong));
+
   const handleClick = async () => {
     const parsedLocation = location.split(" ").join("+");
     setSaving(true);
