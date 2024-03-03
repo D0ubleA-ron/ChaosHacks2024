@@ -1,7 +1,7 @@
 import "./App.css";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StyledTextField = styled(TextField)`
   .MuiInput-underline:before {
@@ -27,28 +27,60 @@ export default function App() {
   const [jsonData, setJsonData] = useState(null);
   const [location, setLocation] = useState("");
   const [start, setStart] = useState(false);
+  const [step, setStep] = useState("");
+  const [saving, setSaving] = useState(false);
   const handleClick = async () => {
     const parsedLocation = location.split(" ").join("+");
+    setSaving(true);
     try {
       const response = await fetch(
         `http://localhost:3001/search?endAddress=${parsedLocation}`
       ); // Point to your local server
       const data = await response.json();
+      let steps = [];
       data.directions[0].trips.forEach((obj) => {
         obj.details.forEach((detail) => {
-          console.log(detail.title, detail.gps_coordinates);
+          steps.push({
+            direction: detail.title,
+            long: detail.gps_coordinates.longitude,
+            lat: detail.gps_coordinates.latitude,
+          });
         });
       });
-      setJsonData(data);
+      steps.push({ direction: "Woo Hoo, You did it!", long: 0, lat: 0 });
+      setJsonData(steps);
       setStart(true);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleQuit = () => {
     alert("Loser");
   };
+
+  useEffect(() => {
+    if (jsonData) {
+      console.log(jsonData);
+    }
+  }, [jsonData]);
+
+  useEffect(() => {
+    if (start) {
+      setStep(jsonData[0]);
+      let i = 1;
+      const interval = setInterval(() => {
+        setStep(jsonData[i]);
+        i++;
+        if (i === jsonData.length) {
+          clearInterval(interval);
+        }
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [start, jsonData]);
 
   return (
     <Grid container style={{ height: "100vh" }}>
@@ -79,6 +111,7 @@ export default function App() {
               variant="contained"
               color="secondary"
               onClick={handleClick}
+              disabled={saving}
             >
               Lets-a-go
             </Button>
@@ -93,8 +126,8 @@ export default function App() {
               alignItems="center"
               height="100%"
             >
-              <Typography color={"white"} variant="h3">
-                Next Steps
+              <Typography color={"white"} variant="h3" textAlign={"center"}>
+                {step.direction}
               </Typography>
             </Box>
           </Grid>
